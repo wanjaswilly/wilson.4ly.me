@@ -3,3 +3,7 @@ vendor/
 .git
 .vscode/
 node_modules/
+.env
+.idea/
+.DS_Store
+*.log
