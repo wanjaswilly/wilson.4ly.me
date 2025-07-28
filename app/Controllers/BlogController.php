@@ -12,20 +12,30 @@ class BlogController
 {
     protected $view;
     
-    public function __construct(Twig $view)
+    public function __construct()
     {
-        $this->view = $view;
     }
     
     public function index(Request $request, Response $response): Response
     {
         $posts = BlogPost::latest()->get();
-        return $this->view->render($response, 'admin/index.twig', ['posts' => $posts]);
+        $view = Twig::fromRequest($request);
+
+        return $view->render($response, 'admin/blog.twig', ['posts' => $posts]);
+    }
+
+    public function showAll(Request $request, Response $response): Response
+    {
+        $posts = BlogPost::where('is_published', true)->latest()->get();
+        $view = Twig::fromRequest($request);
+        return $view->render($response, 'blog/index.twig', ['posts' => $posts]);
     }
     
     public function create(Request $request, Response $response): Response
     {
-        return $this->view->render($response, 'admin/create.twig');
+
+        $view = Twig::fromRequest($request);
+        return $view->render($response, 'admin/create.twig');
     }
     
     public function store(Request $request, Response $response): Response
@@ -45,19 +55,24 @@ class BlogController
         
         $post->save();
         
+        
         return $response->withHeader('Location', '/admin/blog')->withStatus(302);
     }
     
     public function show(Request $request, Response $response, array $args): Response
     {
         $post = BlogPost::where('slug', $args['slug'])->firstOrFail();
-        return $this->view->render($response, 'blog/show.twig', ['post' => $post]);
+
+        $view = Twig::fromRequest($request);
+        return $view->render($response, 'blog/show.twig', ['post' => $post]);
     }
     
     public function edit(Request $request, Response $response, array $args): Response
     {
         $post = BlogPost::findOrFail($args['id']);
-        return $this->view->render($response, 'admin/edit.twig', ['post' => $post]);
+
+        $view = Twig::fromRequest($request);
+        return $view->render($response, 'admin/edit.twig', ['post' => $post]);
     }
     
     public function update(Request $request, Response $response, array $args): Response

@@ -1,0 +1,39 @@
+{% extends "layout.twig" %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+    <div class="max-w-4xl mx-auto py-8 px-4">
+        <h1 class="text-2xl font-bold mb-6">Blog</h1>
+        
+        {% for post in posts %}
+            <article class="mb-8">
+                <h2 class="text-xl font-semibold">
+                    <a href="{{ url_for('blog.show', {'slug': post.slug}) }}" class="text-blue-600 hover:text-blue-800">{{ post.title }}</a>
+                </h2>
+                <p class="text-gray-600">{{ post.excerpt }}</p>
+                <div class="flex items-center text-sm text-gray-500 mt-2">
+                    <span>Published on {{ post.publishedAt|date('F j, Y') }}</span>
+                    <span class="mx-2">•</span>
+                    <span>5 min read</span>
+                </div>
+                {% if post.featuredImage %}
+                    <img src="{{ post.featuredImage }}" alt="{{ post.title }}" class="mt-4 rounded-lg w-full object-cover h-64">
+                {% endif %}
+                <div class="mt-4">
+                    <a href="{{ url_for('blog.show', {'slug': post.slug}) }}" class="text-blue-600 hover:text-blue-800">Read more</a>
+                </div>
+            </article>
+        {% else %}
+            <p class="text-gray-500">No posts available.</p>
+        {% endfor %}    
+
+        {# {% if is_granted('ROLE_ADMIN') %}
+            <div class="mt-8">
+                <a href="{{ path('admin.blog.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Create New Post
+                </a>
+            </div>
+        {% endif %} #}
+    </div>
+{% endblock %}

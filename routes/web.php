@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\BlogController;
+use App\Controllers\SiteController;
 use App\Models\SiteStat;
 use Slim\App;
 use Slim\Views\Twig;
@@ -20,18 +21,19 @@ return function (App $app) {
         });
     }
 
-     // Public routes
-    $app->get('/blog', [BlogController::class, 'showAll']);
-    $app->get('/blog/{slug}', [BlogController::class, 'show']);
-    
+    // Public routes
+    $app->post('/contact', [SiteController::class, 'saveContact'])->setName('contact.submit');
+    $app->get('/blog', [BlogController::class, 'showAll'])->setName('blog');
+    $app->get('/blog/{slug}', [BlogController::class, 'show'])->setName('blog.show');
+
     // Admin routes
     $app->group('/admin/blog', function ($group) {
-        $group->get('', [BlogController::class, 'index']);
-        $group->get('/create', [BlogController::class, 'create']);
-        $group->post('', [BlogController::class, 'store']);
-        $group->get('/{id}/edit', [BlogController::class, 'edit']);
-        $group->put('/{id}', [BlogController::class, 'update']);
-        $group->delete('/{id}', [BlogController::class, 'destroy']);
+        $group->get('', [BlogController::class, 'index'])->setName('admin.blog');
+        $group->get('/create', [BlogController::class, 'create'])->setName('admin.blog.create');
+        $group->post('/store', [BlogController::class, 'store'])->setName('admin.blog.store');
+        $group->get('/{id}/edit', [BlogController::class, 'edit'])->setName('admin.blog.edit');
+        $group->put('/{id}', [BlogController::class, 'update'])->setName('admin.blog.update');
+        $group->delete('/{id}', [BlogController::class, 'destroy'])->setName('admin.blog.destroy');
     });
 
     //  AUTO-GENERATED ROUTES - DO NOT REMOVE THIS LINE
@@ -42,9 +44,15 @@ return function (App $app) {
         throw new \Exception("Intentional test error");
     });
 
-    $app->get('/stats', function ($request, $response) {
+    $app->get('/admin/stats', function ($request, $response) {
         $view = \Slim\Views\Twig::fromRequest($request);
         $stats = SiteStat::orderBy('visited_at', 'desc')->limit(100)->get();
         return $view->render($response, 'pages/stats.twig', ['stats' => $stats]);
+    });
+
+    // Route for 'contact'
+    $app->get('/contact', function ($request, $response) {
+        $view = \Slim\Views\Twig::fromRequest($request);
+        return $view->render($response, "pages/contact.twig");
     });
 };
