@@ -1,0 +1,59 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{ post is defined ? 'Edit' : 'Create' }} Post{% endblock %}
+
+{% block content %}
+    <div class="max-w-4xl mx-auto py-8 px-4">
+        <h1 class="text-2xl font-bold mb-6">
+            {{ post is defined ? 'Edit Post' : 'Create Post' }}
+        </h1>
+        
+        <form method="post" action="{{ post is defined ? '/admin/blog/' ~ post.id : '/admin/blog' }}">
+            {% if post is defined %}
+                <input type="hidden" name="_METHOD" value="PUT">
+            {% endif %}
+            
+            <div class="space-y-6">
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                    <input type="text" id="title" name="title" value="{{ post.title ?? '' }}" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                
+                <div>
+                    <label for="excerpt" class="block text-sm font-medium text-gray-700">Excerpt</label>
+                    <textarea id="excerpt" name="excerpt" rows="3"
+                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">{{ post.excerpt ?? '' }}</textarea>
+                </div>
+                
+                <div>
+                    <label for="featured_image" class="block text-sm font-medium text-gray-700">Featured Image URL</label>
+                    <input type="text" id="featured_image" name="featured_image" value="{{ post.featured_image ?? '' }}"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                
+                <div>
+                    <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
+                    {% include 'partials/_editor.twig' with { content: post.content ?? '' } %}
+                </div>
+                
+                <div class="flex items-center">
+                    <input type="checkbox" id="is_published" name="is_published" 
+                           class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" 
+                           {{ (post.is_published ?? false) ? 'checked' : '' }}>
+                    <label for="is_published" class="ml-2 block text-sm text-gray-900">Publish this post</label>
+                </div>
+                
+                <div class="flex justify-end space-x-3">
+                    <a href="/admin/blog" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Cancel</a>
+                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="/assets/js/editor.js"></script>
+{% endblock %}
