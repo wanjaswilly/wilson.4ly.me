@@ -44,6 +44,8 @@ class BlogController
         
         $post = new BlogPost();
         $post->title = $data['title'];
+        // Generate a URL-safe slug from the title
+        $post->slug = strtolower(preg_replace('/[^A-Za-z0-9-]+/', '-', trim($data['title'])));
         $post->content = $data['content'];
         $post->excerpt = $data['excerpt'] ?? null;
         $post->featured_image = $data['featured_image'] ?? null;

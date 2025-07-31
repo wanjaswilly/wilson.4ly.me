@@ -4,12 +4,14 @@ namespace App\Controllers;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Views\Twig;
 
 class SiteController
 {
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $response->getBody()->write("Hello from SiteController");
-        return $response;
+        $view = Twig::fromRequest($request);
+
+        return $view->render($response, 'admin/dashboard.twig');
     }
 }

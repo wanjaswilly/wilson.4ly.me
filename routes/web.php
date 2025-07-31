@@ -23,13 +23,18 @@ return function (App $app) {
     $app->get('/blog/{slug}', [BlogController::class, 'show'])->setName('blog.show');
     
 
-    // Admin routes
+    # Admin routes
+    $app->group('/admin', function ($group) {
+        $group->get('', [SiteController::class, 'index'])->setName('admin');
+    });
+
+    # Admin blog routes
     $app->group('/admin/blog', function ($group) {
         $group->get('', [BlogController::class, 'index'])->setName('admin.blog');
         $group->get('/create', [BlogController::class, 'create'])->setName('admin.blog.create');
         $group->post('/store', [BlogController::class, 'store'])->setName('admin.blog.store');
         $group->get('/{id}/edit', [BlogController::class, 'edit'])->setName('admin.blog.edit');
-        $group->put('/{id}', [BlogController::class, 'update'])->setName('admin.blog.update');
+        $group->post('/save-edit/{id}', [BlogController::class, 'update'])->setName('admin.blog.update');
         $group->delete('/{id}', [BlogController::class, 'destroy'])->setName('admin.blog.destroy');
     });
 
