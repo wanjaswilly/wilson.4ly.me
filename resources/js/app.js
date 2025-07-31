@@ -92,3 +92,52 @@ document.addEventListener('DOMContentLoaded', function () {
         iconClose.classList.toggle('hidden')
     });
 });
+
+async function sendMessage(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    const payload = Object.fromEntries(formData.entries());
+
+    // Reset alert area
+    const alertBox = document.getElementById('form-alert');
+    alertBox.innerHTML = '';
+    alertBox.className = '';
+
+    try {
+        const res = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+            },
+            body: new URLSearchParams(payload),
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+            alertBox.className = 'mb-6 p-4 rounded-md bg-green-100 text-green-800';
+            alertBox.textContent = result.message;
+            form.reset();
+        } else if (result.errors) {
+            alertBox.className = 'mb-6 p-4 rounded-md bg-red-100 text-red-800';
+            for (const [field, messages] of Object.entries(result.errors)) {
+                const fieldInput = document.getElementById(field);
+                if (fieldInput) {
+                    fieldInput.classList.add('border-red-500');
+                }
+                alertBox.innerHTML += `<div><strong>${field}:</strong> ${messages.join(', ')}</div>`;
+            }
+        } else {
+            alertBox.className = 'mb-6 p-4 rounded-md bg-red-100 text-red-800';
+            alertBox.textContent = 'Something went wrong. Please try again later.';
+        }
+    } catch (error) {
+        console.error(error);
+        alertBox.className = 'mb-6 p-4 rounded-md bg-red-100 text-red-800';
+        alertBox.textContent = 'A network error occurred. Please try again.';
+    }
+}
+
