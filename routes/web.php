@@ -18,6 +18,7 @@ return function (App $app) {
     });    
 
     // Public routes
+    $app->post('/subscribe', [SiteController::class, 'subscribe'])->setName('subscribe');
     $app->post('/contact', [SiteController::class, 'saveContact'])->setName('contact.submit');
     $app->get('/blog', [BlogController::class, 'showAll'])->setName('blog');
     $app->get('/blog/{slug}', [BlogController::class, 'show'])->setName('blog.show');
