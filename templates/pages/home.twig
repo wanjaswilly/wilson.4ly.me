@@ -49,62 +49,27 @@
         </li>
       </ul>
     </section>
-
-    <!-- Blog Section -->
     <section class="mb-16">
       <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-8 pb-2 border-b border-gray-200 dark:border-gray-700">Latest Blog Posts</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Blog Card 1 -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700 flex flex-col h-full">
-          <img src="/assets/blog/middleware.jpg" alt="Slim Middleware" class="w-full h-48 object-cover" />
-          <div class="px-4 py-6 flex flex-col h-full">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Understanding Slim Middleware</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 flex-grow">Dive into how Slim PHP middleware works and how you can use it to intercept and modify requests and responses.</p>
-            <div class="flex items-center justify-between mt-auto">
-              <span class="text-xs text-gray-500 dark:text-gray-400">July 27, 2025</span>
-              <a href="/blog/slim-middleware" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm">
-                Read more<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </a>
+        {% for post in posts %}
+          <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700 flex flex-col h-full">
+            <img src="{{ asset('assets/blog/' ~ post.image) }}" alt="{{ post.title }}" class="w-full h-48 object-cover" />
+            <div class="px-4 py-6 flex flex-col h-full">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ post.title }}</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 flex-grow">{{ post.excerpt }}</p>
+              <div class="flex items-center justify-between mt-auto">
+                <span class="text-xs text-gray-500 dark:text-gray-400">{{ post.published_at|date('F j, Y') }}</span>
+                <a href="/blog/{{ post.slug }}" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm">
+                  Read more<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-
-        <!-- Blog Card 2 -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700 flex flex-col h-full">
-          <img src="/assets/blog/url-shortener.jpg" alt="URL Shortener" class="w-full h-48 object-cover" />
-          <div class="px-4 py-6 flex flex-col h-full">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Building a URL Shortener in Slim</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 flex-grow">A step-by-step guide to building your own Bit.ly-like short URL service with PHP, Slim 4, and Eloquent ORM.</p>
-            <div class="flex items-center justify-between mt-auto">
-              <span class="text-xs text-gray-500 dark:text-gray-400">July 25, 2025</span>
-              <a href="/blog/url-shortener" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm">
-                Read more<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Blog Card 3 -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700 flex flex-col h-full">
-          <img src="/assets/blog/visitor-tracking.jpg" alt="Visitor Tracking" class="w-full h-48 object-cover" />
-          <div class=" px-4 py-6 flex flex-col h-full">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">How to Track Visitors with Middleware</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 flex-grow">Learn how to capture IPs, devices, countries, and more using a custom Slim middleware and Tailwind dashboard.</p>
-            <div class="flex items-center justify-between mt-auto">
-              <span class="text-xs text-gray-500 dark:text-gray-400">July 21, 2025</span>
-              <a href="/blog/visitor-tracking" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm">
-                Read more<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </section>
 

@@ -7,19 +7,21 @@
     <title>
       {% block title %}
         {{ APP_NAME }}
-      {% endblock %}
+      {% endblock %}| Wilson Wanja - Full-Stack Developer
     </title>
 
-    <meta name="description" content="{% block description %} {% endblock %}" />
+    <meta name="description"
+      content="{% block description %}
+      {% endblock %}" />
     <meta name="author" content="Wilson Wanja" />
     <meta name="keywords" content="Wilson Wanja, Full-stack Developer, Slim PHP, Flask, Linux, Portfolio" />
 
     <!-- Open Graph (OG) Tags for social media -->
     <meta property="og:title"
-      content="{% block og_title %} Wilson Wanja - Full-Stack Developer
+      content="{% block og_title %}
       {% endblock %}" />
     <meta property="og:description"
-      content="{% block og_description %} Wilson Wanja is a full-stack developer specializing in scalable web apps, Linux systems, and AI integrations. Explore my portfolio to see my work with Slim PHP, Laravel, Flask, and Frappe.
+      content="{% block og_description %}
       {% endblock %}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ APP_URL|default('https://wilson.4ly.me') }}" />
@@ -28,23 +30,24 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title"
-      content="{% block twitter_title %} Wilson Wanja - Full-Stack Developer
+      content="{% block twitter_title %}
       {% endblock %}" />
     <meta name="twitter:description"
-      content="{% block twitter_description %} Wilson Wanja is a full-stack developer specializing in scalable web apps, Linux systems, and AI integrations. Explore my portfolio to see my work with Slim PHP, Laravel, Flask, and Frappe.
+      content="{% block twitter_description %}
       {% endblock %}" />
     <meta name="twitter:image" content="{{ APP_URL|default('https://example.com') }}/assets/twitter-card.jpg" />
 
     <!-- Tailwind CSS -->
     {% if APP_ENVIRONMENT != 'DEV' %}
       {# Development - use Vite server #}
-      <script type="module" src="http://localhost:8000/@vite/client"></script>
-      <script type="module" src="http://localhost:8000/resources/js/app.js"></script>
-      <link rel="stylesheet" href="http://localhost:8000/resources/css/app.css" />
+
+      <script type="module" src="http://localhost:5173/@vite/client"></script>
+      <script type="module" src="http://localhost:5173/resources/js/app.js"></script>
+      <link rel="stylesheet" href="http://localhost:5173/resources/css/app.css" />
     {% else %}
       {# Production - use built assets #}
-      <link rel="stylesheet" href="{{ asset('/build/assets/app.DG0qT3Dz.css') }}" />
-      <script type="module" src="{{ asset('/build/assets/app-CUjxj0mT.js') }}"></script>
+      <link rel="stylesheet" href="{{ asset('/build/assets/app.B2VzdWgF.css') }}" />
+      <script type="module" src="{{ asset('/build/assets/app-CDVvWA6Y.js') }}"></script>
     {% endif %}
 
     <!-- Favicon -->
@@ -54,6 +57,7 @@
     {% include 'partials/header.twig' %}
     <main>
       {% block content %}
+
       {% endblock %}
     </main>
     {% include 'partials/footer.twig' %}

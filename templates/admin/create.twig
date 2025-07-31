@@ -8,7 +8,7 @@
             {{ post is defined ? 'Edit Post' : 'Create Post' }}
         </h1>
         
-        <form method="post" action="{{ post is defined ? '/admin/blog/' ~ post.id : '/admin/blog' }}">
+        <form method="post" action="{{ post is defined ? '/admin/blog/' ~ post.id ~ '/edit': '/admin/blog/store' }}">
             {% if post is defined %}
                 <input type="hidden" name="_METHOD" value="PUT">
             {% endif %}

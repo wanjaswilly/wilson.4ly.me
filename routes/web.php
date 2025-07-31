@@ -2,6 +2,7 @@
 
 use App\Controllers\BlogController;
 use App\Controllers\SiteController;
+use App\Models\BlogPost;
 use App\Models\SiteStat;
 use Slim\App;
 use Slim\Views\Twig;
@@ -10,29 +11,31 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 return function (App $app) {
     // Static core routes
-    $pages = [
-        '/'          => 'home',
-
-    ];
-    foreach ($pages as $route => $template) {
-        $app->get($route, function (Request $request, Response $response) use ($template) {
-            $view = Twig::fromRequest($request);
-            return $view->render($response, "pages/{$template}.twig");
-        });
-    }
+    $app->get('/', function (Request $request, Response $response, $args) {
+        $posts = BlogPost::orderBy('published_at', 'desc')->take(6)->get();
+        $view = Twig::fromRequest($request);
+        return $view->render($response, 'pages/home.twig', ['posts' => $posts]);
+    });    
 
     // Public routes
+    $app->post('/subscribe', [SiteController::class, 'subscribe'])->setName('subscribe');
     $app->post('/contact', [SiteController::class, 'saveContact'])->setName('contact.submit');
     $app->get('/blog', [BlogController::class, 'showAll'])->setName('blog');
     $app->get('/blog/{slug}', [BlogController::class, 'show'])->setName('blog.show');
+    
 
-    // Admin routes
+    # Admin routes
+    $app->group('/admin', function ($group) {
+        $group->get('', [SiteController::class, 'index'])->setName('admin');
+    });
+
+    # Admin blog routes
     $app->group('/admin/blog', function ($group) {
         $group->get('', [BlogController::class, 'index'])->setName('admin.blog');
         $group->get('/create', [BlogController::class, 'create'])->setName('admin.blog.create');
         $group->post('/store', [BlogController::class, 'store'])->setName('admin.blog.store');
         $group->get('/{id}/edit', [BlogController::class, 'edit'])->setName('admin.blog.edit');
-        $group->put('/{id}', [BlogController::class, 'update'])->setName('admin.blog.update');
+        $group->post('/save-edit/{id}', [BlogController::class, 'update'])->setName('admin.blog.update');
         $group->delete('/{id}', [BlogController::class, 'destroy'])->setName('admin.blog.destroy');
     });
 

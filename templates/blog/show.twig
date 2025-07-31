@@ -2,8 +2,8 @@
 
 {% block title %}{{ post.title }}{% endblock %}
 
-{% block body %}
-    <article class="max-w-3xl mx-auto px-4 py-8">
+{% block content %}
+    <article class="max-w-4xl mx-auto px-4 py-8">
         <header class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ post.title }}</h1>
             <div class="flex items-center text-sm text-gray-500">
@@ -20,10 +20,10 @@
             {{ post.content|raw }}
         </div>
 
-        {% if is_granted('ROLE_ADMIN') %}
+        {# {% if is_granted('ROLE_ADMIN') %}
             <div class="mt-8 pt-6 border-t border-gray-200">
                 <a href="{{ path('admin_blog_edit', {'id': post.id}) }}" class="text-blue-600 hover:text-blue-800">Edit Post</a>
             </div>
-        {% endif %}
+        {% endif %} #}
     </article>
 {% endblock %}

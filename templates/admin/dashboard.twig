@@ -1,0 +1,47 @@
+{% extends 'layout.twig' %}
+
+{% block title %}
+  Admin Dashboard
+{% endblock %}
+{% block header_title %}
+  Dashboard
+{% endblock %}
+
+{% block content %}
+  <div class="max-w-4xl mx-auto py-8 px-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Stats -->
+      <a href="/admin/stats">
+        <div class="bg-white shadow rounded p-6 hover:shadow-lg transition">
+          <h2 class="text-xl font-bold mb-2">Site Statistics</h2>
+          <p class="text-gray-600 mb-4">Manage all site visits, device types and regions.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-3xl font-bold text-blue-600">{{ visitors }}</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Blog -->
+      <a href="/admin/blog">
+        <div class="bg-white shadow rounded p-6 hover:shadow-lg transition">
+          <h2 class="text-xl font-bold mb-2">Blog</h2>
+          <p class="text-gray-600 mb-4">Add, edit, manage or delete blog posts.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-3xl font-bold text-green-600">{{ posts }}</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Messages -->
+      <a href="/admin/messages">
+        <div class="bg-white shadow rounded p-6 hover:shadow-lg transition">
+          <h2 class="text-xl font-bold mb-2">Site Messages</h2>
+          <p class="text-gray-600 mb-4">View, reply and manage site contact messages</p>
+          <div class="flex items-center justify-between">
+            <span class="text-3xl font-bold text-yellow-600">{{ messages }}</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+{% endblock %}
