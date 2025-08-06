@@ -18,11 +18,9 @@
 
     <!-- Open Graph (OG) Tags for social media -->
     <meta property="og:title"
-      content="{% block og_title %}
-      {% endblock %}" />
+      content="{% block og_title %} Wilson Wanja - Full-Stack Developer  {% endblock %}" />
     <meta property="og:description"
-      content="{% block og_description %}
-      {% endblock %}" />
+      content="{% block og_description %} Full-stack developer specializing in scalable web applications, Linux systems, and AI integrations. I build robust solutions with Slim PHP, Laravel, Flask, and C.  {% endblock %}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ APP_URL|default('https://wilson.4ly.me') }}" />
     <meta property="og:image" content="{{ APP_URL|default('https://wilson.4ly.me') }}/images/wanja-wilson.jpg" />
@@ -30,15 +28,13 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title"
-      content="{% block twitter_title %}
-      {% endblock %}" />
+      content="{% block twitter_title %} Wilson Wanja - Full-Stack Developer  {% endblock %}" />
     <meta name="twitter:description"
-      content="{% block twitter_description %}
-      {% endblock %}" />
+      content="{% block twitter_description %} Full-stack developer specializing in scalable web applications, Linux systems, and AI integrations. I build robust solutions with Slim PHP, Laravel, Flask, and C.  {% endblock %}" />
     <meta name="twitter:image" content="{{ APP_URL|default('https://wilson.4ly.me') }}/images/wanja-wilson.jpg" />
 
     <!-- Tailwind CSS -->
-    {% if APP_ENVIRONMENT != 'DEV' %}
+    {% if APP_ENVIRONMENT == 'DEV' %}
       {# Development - use Vite server #}
 
       <script type="module" src="http://localhost:5173/@vite/client"></script>
