@@ -50,7 +50,7 @@ return function (App $app) {
     $app->get('/admin/stats', function ($request, $response) {
         $view = \Slim\Views\Twig::fromRequest($request);
         $stats = SiteStat::orderBy('visited_at', 'desc')->limit(100)->get();
-        return $view->render($response, 'pages/stats.twig', ['stats' => $stats]);
+        return $view->render($response, 'admin/stats.twig', ['stats' => $stats]);
     });
 
     // Route for 'contact'

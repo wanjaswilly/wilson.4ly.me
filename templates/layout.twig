@@ -46,9 +46,13 @@
       <link rel="stylesheet" href="http://localhost:5173/resources/css/app.css" />
     {% else %}
       {# Production - use built assets #}
-      <link rel="stylesheet" href="{{ asset('/build/assets/app.B2VzdWgF.css') }}" />
-      <script type="module" src="{{ asset('/build/assets/app-CDVvWA6Y.js') }}"></script>
+      <link rel="stylesheet" href="{{ asset('/build/assets/app.css') }}" />
+      <script type="module" src="{{ asset('/build/assets/app-Dlq95sxn.js') }}"></script>
     {% endif %}
+
+      {% block styles %}
+
+      {% endblock %}
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
