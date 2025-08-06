@@ -1,130 +1,145 @@
-# Slim Simple Site Skeleton
+# Wilson Wanja - Full-Stack Developer Portfolio
 
-A lightweight, reusable Slim 4 + Twig boilerplate for static company or portfolio websites (4–7 pages). Ideal for fast deployment of simple informational sites like:
+![Portfolio Screenshot](public/images/homepage-screenshot.jpg)
 
-- Company Homepage
-- About Us
-- Mission / Vision
-- Contact Page
-- Team / Partners
-- Impact / Services
-
----
+A modern portfolio and technical blog showcasing my work as a full-stack developer, built on the Slim PHP framework.
 
 ## Features
 
--  Slim 4 routing
--  Twig templating
--  Clean layout with partials
--  Custom 404 & 500 error pages
--  No session/authentication overhead
--  Fast and easy to clone for new websites
--  A `slim` cli command for ease in creating or removing pages and serving the site
+- **Modern UI/UX** with dark/light mode toggle
+- **Responsive Design** optimized for all devices
+- **Performance Focused** (95+ Lighthouse scores)
+- **Technical Blog** with Markdown support
+- **Project Showcase** with interactive cards
+- **Contact System** with form validation
+- **Easy Content Management** via CLI
 
-## 🛠 Slim CLI
+## Technology Stack
 
-Easily scaffold pages, partials, or run the local server using the built-in CLI tool:
+| Component          | Technology               |
+|--------------------|--------------------------|
+| Backend Framework  | Slim PHP 4               |
+| Frontend           | Tailwind CSS + Alpine.js |
+| Templating         | Twig                     |
+| Database           | SQLite (for blog)        |
+| Deployment Ready   | Docker configuration     |
+| CI/CD              | GitHub Actions           |
 
+## Getting Started
+
+### Prerequisites
+- PHP 8.0+
+- Composer
+- Node.js 16+
+- SQLite (for blog functionality)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-# Create a new page (e.g., /about)
-php slim make:page about
+git clone https://github.com/wanjaswilly/wilson.4ly.me.git ./your-folder-name
+cd your-folder-name
+```
 
-# Remove a page
-php slim remove:page about
+2. Install dependencies:
+```bash
+composer install
+npm install && npm run build
+```
 
-# Create a new Twig partial (e.g., footer.twig in /partials)
-php slim make:partial footer
+3. Configure environment:
+```bash
+cp .env.example .env
+# Edit .env with your settings
+```
 
-# Start the development server at http://localhost:8000
+### Development
+```bash
 php slim serve
-````
-
-
-
----
+```
+Visit `http://localhost:8000`
 
 ## Project Structure
 
 ```
+wilson.4ly.me/
+├── app/                  # Application core
+│   ├── Controllers       # Request handlers
+│   ├── Helpers           # Utilities (BlogGenerator, etc.)
+│   └── Middlewares       # HTTP middleware
+│   └── Models            # HTTP middleware
+├── config/               # Configuration files
+│   ├── app.php           # Main config
+│   └── projects.php      # Projects data
+├── database/             # Database migrations
+├── public/               # Web root
+│   ├── build/            # Compiled assets
+│   └── images/           # Site images
+├── resources/            # Frontend assets
+│   ├── css/              # Custom styles
+│   └── js/               # JavaScript
+├── routes/               # Route definitions
+│   └── web.php           # Main routes
+├── templates/            # Twig templates
+│   ├── layout.twig       # Base template
+│   ├── partials/         # Reusable components
+│   ├── pages/            # Page templates
+│   └── errors/           # Error pages
+├── .env.example          # Environment template
+├── composer.json         # PHP dependencies
+├── package.json          # JS dependencies
+└── slim                  # Custom CLI tool
+```
 
-company-site/
-├── public/
-│   └── index.php          # Entry point
-├── templates/
-│   ├── layout.twig        # Base layout
-│   ├── partials/
-│   │   ├── header.twig
-│   │   └── footer.twig
-│   ├── pages/
-│   │   ├── home.twig
-│   │   ├── about.twig
-│   │   └── ...
-│   └── errors/
-│       ├── 404.twig
-│       └── 500.twig
-├── routes/
-│   └── web.php            # Route definitions
-├── bootstrap.php          # App + middleware setup
-├── composer.json
-├── slim                   # a simple commandline interface
-└── .htaccess              # Optional (Apache friendly URLs)
+## Content Management
 
+### Using the CLI Tool
 
-````
+| Command | Description |
+|---------|-------------|
+| `php slim make:page about` | Create new page |
+| `php slim remove:page about` | Remove page |
+| `php slim make:partial footer` | Create new partial |
+| `php slim make:model modelName` | Creates new model with the name given |
+| `php slim make:model modelName -m` | Creates new model with the name given and a migration for it |
+| `php slim migrate` | runs all pending migrations |
+| `php slim serve` | Start dev server |
 
----
+### Adding Blog Posts
+1. Create an admin user then log in to admin panel
+2. Create a blog under blogs
 
-## Setup Instructions
+### Managing Projects
+Log in to the admin panel and choose add a new project
 
-### 1. Clone This Skeleton
+## Deployment
 
+### Docker
 ```bash
-git clone https://github.com/wanjaswilly/slim-simple-site-skeleton.git
-cd slim-simple-site-skeleton
-````
+docker-compose up -d --build
+```
 
-### 2. Install Dependencies
-
+### Traditional
+1. Configure web server to point to `public/`
+2. Set production environment variables
+3. Run:
 ```bash
 composer install
-npm install
+npm run build
+
 ```
 
-### 3. Start Development Server
+## Contact
 
-```bash
-php slim serve
-```
+- Email: [wilson@4ly.me](mailto:wilson@4ly.me)
+- Twitter: [@wanjaswilly](https://twitter.com/wanjaswilly)
+- GitHub: [wanjaswilly](https://github.com/wanjaswilly)
 
-Now open [http://localhost:8000](http://localhost:8000) in your browser.
-
----
-
-## Adding New Pages
-
-To create a page and define its route in `routes/web.php` you call the slim command:
-
-```php
- php slim make:page yourpagename
-```
-
----
-
-## Error Pages
-
-* `templates/errors/404.twig` handles Not Found errors
-* `templates/errors/500.twig` handles general server errors
-
-These are rendered automatically via middleware defined in `bootstrap.php`.
-
----
-
-## 🔗 License
+## License
 
 MIT License © 2025 Wilson Wanja
 
-
-
 ---
-# wilson.4ly.me
-# wilson.4ly.me
+
+Built with the [Slim Simple Site Skeleton](https://github.com/wanjaswilly/slim-site-skeleton)
+

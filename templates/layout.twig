@@ -25,7 +25,7 @@
       {% endblock %}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ APP_URL|default('https://wilson.4ly.me') }}" />
-    <meta property="og:image" content="{{ APP_URL|default('https://example.com') }}/assets/og-image.jpg" />
+    <meta property="og:image" content="{{ APP_URL|default('https://wilson.4ly.me') }}/images/wanja-wilson.jpg" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -35,7 +35,7 @@
     <meta name="twitter:description"
       content="{% block twitter_description %}
       {% endblock %}" />
-    <meta name="twitter:image" content="{{ APP_URL|default('https://example.com') }}/assets/twitter-card.jpg" />
+    <meta name="twitter:image" content="{{ APP_URL|default('https://wilson.4ly.me') }}/images/wanja-wilson.jpg" />
 
     <!-- Tailwind CSS -->
     {% if APP_ENVIRONMENT != 'DEV' %}
@@ -46,9 +46,13 @@
       <link rel="stylesheet" href="http://localhost:5173/resources/css/app.css" />
     {% else %}
       {# Production - use built assets #}
-      <link rel="stylesheet" href="{{ asset('/build/assets/app.B2VzdWgF.css') }}" />
-      <script type="module" src="{{ asset('/build/assets/app-CDVvWA6Y.js') }}"></script>
+      <link rel="stylesheet" href="{{ asset('/build/assets/app.css') }}" />
+      <script type="module" src="{{ asset('/build/assets/app-Dlq95sxn.js') }}"></script>
     {% endif %}
+
+      {% block styles %}
+
+      {% endblock %}
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
