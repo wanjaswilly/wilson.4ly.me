@@ -119,7 +119,7 @@ Log in to the admin panel and choose add a new project
 docker-compose up -d --build
 ```
 
-### Traditional
+### Traditional/Apache/Nginx
 1. Configure web server to point to `public/`
 2. Set production environment variables
 3. Run:
