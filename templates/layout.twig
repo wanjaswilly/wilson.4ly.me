@@ -34,18 +34,9 @@
     <meta name="twitter:image" content="{{ APP_URL|default('https://wilson.4ly.me') }}/images/wanja-wilson.jpg" />
 
     <!-- Tailwind CSS -->
-    {% if APP_ENVIRONMENT == 'DEV' %}
-      {# Development - use Vite server #}
-
-      <script type="module" src="http://localhost:5173/@vite/client"></script>
-      <script type="module" src="http://localhost:5173/resources/js/app.js"></script>
-      <link rel="stylesheet" href="http://localhost:5173/resources/css/app.css" />
-    {% else %}
       {# Production - use built assets #}
       <link rel="stylesheet" href="{{ asset('/build/assets/app.css') }}" />
       <script type="module" src="{{ asset('/build/assets/app-Dlq95sxn.js') }}"></script>
-    {% endif %}
-
       {% block styles %}
 
       {% endblock %}

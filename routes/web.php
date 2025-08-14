@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\BlogController;
+use App\Controllers\ProjectsController;
 use App\Controllers\SiteController;
 use App\Models\BlogPost;
 use App\Models\SiteStat;
@@ -15,14 +16,25 @@ return function (App $app) {
         $posts = BlogPost::orderBy('published_at', 'desc')->take(6)->get();
         $view = Twig::fromRequest($request);
         return $view->render($response, 'pages/home.twig', ['posts' => $posts]);
-    });    
+    });
 
     // Public routes
     $app->post('/subscribe', [SiteController::class, 'subscribe'])->setName('subscribe');
     $app->post('/contact', [SiteController::class, 'saveContact'])->setName('contact.submit');
     $app->get('/blog', [BlogController::class, 'showAll'])->setName('blog');
     $app->get('/blog/{slug}', [BlogController::class, 'show'])->setName('blog.show');
-    
+
+    # projects routes
+    $app->group('/projects', function ($group) {
+        $group->get('', [ProjectsController::class, 'index'])->setName('projects.index');
+        $group->get('/create', [ProjectsController::class, 'create'])->setName('projects.create');
+        $group->post('', [ProjectsController::class, 'store'])->setName('projects.store');
+        $group->get('/{slug}', [ProjectsController::class, 'show'])->setName('projects.show');
+        $group->get('/{slug}/edit', [ProjectsController::class, 'edit'])->setName('projects.edit');
+        $group->put('/{slug}', [ProjectsController::class, 'update'])->setName('projects.update');
+        $group->delete('/{slug}', [ProjectsController::class, 'destroy'])->setName('projects.destroy');
+    });
+
 
     # Admin routes
     $app->group('/admin', function ($group) {
