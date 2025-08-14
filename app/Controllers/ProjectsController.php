@@ -3,21 +3,20 @@
 namespace App\Controllers;
 
 use App\Models\Project;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
+use Slim\Http\ServerRequest;
 use Slim\Psr7\Request;
 use Slim\Views\Twig;
 
 class ProjectsController
 {
 
-    public function index(Request $request, Response $response): Response
+    public function index(ServerRequest $request, Response $response): Response
     {
         $projects = Project::ordered()->get();
         $view = Twig::fromRequest($request);
 
-        return $view->render($response, 'projects/blog.twig', ['projects' => $projects]);
+        return $view->render($response, 'projects/all.twig', ['projects' => $projects]);
     }
 
 
@@ -27,7 +26,7 @@ class ProjectsController
 
         $view = Twig::fromRequest($request);
 
-        return $view->render($response, 'projects/blog.twig', ['project' => $project]);
+        return $view->render($response, 'projects/show.twig', ['project' => $project]);
     }
     public function create(Request $request, Response $response, $slug)
     {
@@ -42,7 +41,7 @@ class ProjectsController
 
         $view = Twig::fromRequest($request);
 
-        return $view->render($response, 'projects/create.twig', [
+        return $view->render($response, 'projects/edit.twig', [
             'project' => $project
         ]);
     }
