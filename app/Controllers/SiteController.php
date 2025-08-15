@@ -234,4 +234,31 @@ class SiteController
 </html>
 HTML;
     }
+    
+    /**
+     * Handle newsletter subscription
+     */
+    public function subscribe(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $data = $request->getParsedBody() ?? [];
+        
+        // For now, just return a success response
+        // In a real application, you would save the email to a database
+        $response->getBody()->write(json_encode([
+            'success' => true,
+            'message' => 'Thank you for subscribing to our newsletter!'
+        ]));
+        
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+    
+    /**
+     * Handle contact form submission
+     */
+    public function saveContact(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        return $this->saveMessage($request, $response);
+    }
 }

@@ -28,7 +28,7 @@ return function (App $app) {
 
     // Project routes
     $app->get('/projects', [ProjectsController::class, 'showAll'])->setName('projects.show-all');
-    $app->get('projects/{slug}', [ProjectsController::class, 'show'])->setName('projects.show');
+    $app->get('/projects/{slug}', [ProjectsController::class, 'show'])->setName('projects.show');
 
     # Admin projects routes
     $app->group('/admin/projects', function ($group) {

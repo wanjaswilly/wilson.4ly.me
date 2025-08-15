@@ -3,14 +3,14 @@
 namespace App\Controllers;
 
 use App\Models\Project;
-use Slim\Http\Response;
-use Slim\Http\ServerRequest;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 
 class ProjectsController
 {
 
-    public function index(ServerRequest $request, Response $response): Response
+    public function index(Request $request, Response $response): Response
     {
         $projects = Project::ordered()->get();
         $view = Twig::fromRequest($request);
@@ -19,25 +19,25 @@ class ProjectsController
     }
 
 
-    public function show(ServerRequest $request, Response $response, $slug)
+    public function show(Request $request, Response $response, array $args)
     {
-        $project = Project::where('slug', $slug)->firstOrFail();
-        $project['technologies'] = json_decode($project->technologies, true);
+        $project = Project::where('slug', $args['slug'])->firstOrFail();
+        $project->technologies = json_decode($project->technologies, true);
 
         $view = Twig::fromRequest($request);
 
         return $view->render($response, 'projects/show.twig', ['project' => $project]);
     }
-    public function create(ServerRequest $request, Response $response, $slug)
+    public function create(Request $request, Response $response)
     {
         $view = Twig::fromRequest($request);
 
         return $view->render($response, 'projects/create.twig');
     }
 
-    public function edit(ServerRequest $request, Response $response, $slug)
+    public function edit(Request $request, Response $response, array $args)
     {
-        $project = Project::where('slug', $slug)->firstOrFail();
+        $project = Project::where('slug', $args['slug'])->firstOrFail();
 
         $view = Twig::fromRequest($request);
 
@@ -46,14 +46,15 @@ class ProjectsController
         ]);
     }
 
-    public function store(ServerRequest $request, Response $response)
+    public function store(Request $request, Response $response)
 {
     $data = $request->getParsedBody();
     $uploadedFiles = $request->getUploadedFiles();
     
     // Validate required fields
     if (empty($data['title'])) {
-        return $response->withJson(['error' => 'Title is required'], 400);
+        $response->getBody()->write(json_encode(['error' => 'Title is required']));
+        return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
     }
 
     $imagePath = null;
@@ -94,9 +95,9 @@ class ProjectsController
         ->withStatus(302);
 }
 
-public function update(ServerRequest $request, Response $response, $slug)
+public function update(Request $request, Response $response, array $args)
 {
-    $project = Project::where('slug', $slug)->firstOrFail();
+    $project = Project::where('slug', $args['slug'])->firstOrFail();
     $data = $request->getParsedBody();
     $uploadedFiles = $request->getUploadedFiles();
     
@@ -141,9 +142,9 @@ public function update(ServerRequest $request, Response $response, $slug)
         ->withStatus(302);
 }
 
-    public function destroy(ServerRequest $request, Response $response, $slug)
+    public function destroy(Request $request, Response $response, array $args)
     {
-        $project = Project::where('slug', $slug)->firstOrFail();
+        $project = Project::where('slug', $args['slug'])->firstOrFail();
         $project->delete();
 
         return $response
