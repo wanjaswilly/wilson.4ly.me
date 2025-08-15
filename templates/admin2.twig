@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{APP_NAME}} Admin{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/admin/favicon.ico">
+    
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    
+    {% block styles %}{% endblock %}
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+    <div class="flex h-screen overflow-hidden">
+    <!-- Mobile sidebar backdrop (hidden by default) -->
+        <div id="sidebarBackdrop" class="fixed inset-0 z-20 bg-black bg-opacity-50 hidden md:hidden"></div>
+        <!-- Sidebar -->
+
+        <aside id="sidebar" class="fixed md:relative z-30 w-64 bg-indigo-800 text-white shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out h-full">
+            <div class="p-4 border-b border-indigo-700 flex justify-between items-center">
+                <a href="/admin" class="flex items-center space-x-2">
+                    <img src="/assets/admin/img/logo-white.png" alt="Logo" class="h-8">
+                    <span class="text-xl font-bold">{{APP_NAME}}</span>
+                </a>
+                <button id="closeSidebar" class="md:hidden text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <nav class="p-4 overflow-y-auto h-[calc(100%-64px)]">
+                <!-- Sidebar content remains the same as before -->
+                <div class="mb-6">
+                    <p class="text-xs uppercase text-indigo-400 font-semibold mb-2">Main</p>
+                    <ul>
+                        <li class="mb-1">
+                            <a href="/admin" class="flex items-center p-2 rounded hover:bg-indigo-700 {% if current_route == 'dashboard' %}bg-indigo-700{% endif %}">
+                                <i class="fas fa-tachometer-alt mr-3"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mb-6">
+                    <p class="text-xs uppercase text-indigo-400 font-semibold mb-2">Content</p>
+                    <ul>
+                        <li class="mb-1">
+                            <a href="/admin/blog" class="flex items-center p-2 rounded hover:bg-indigo-700 {% if current_route starts with 'hotels' %}bg-indigo-700{% endif %}">
+                                <i class="fas fa-hotel mr-3"></i>
+                                <span>Blog</span>
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="/admin/projects" class="flex items-center p-2 rounded hover:bg-indigo-700 {% if current_route starts with 'hotels' %}bg-indigo-700{% endif %}">
+                                <i class="fas fa-hotel mr-3"></i>
+                                <span>Projects</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mb-6">
+                    <p class="text-xs uppercase text-indigo-400 font-semibold mb-2">System</p>
+                    <ul>
+                        <li class="mb-1">
+                            <a href="/admin/stats" class="flex items-center p-2 rounded hover:bg-indigo-700 {% if current_route starts with 'users' %}bg-indigo-700{% endif %}">
+                                <i class="fas fa-users mr-3"></i>
+                                <span>Statistics</span>
+                            </a>
+                        </li>
+                        <li class="mb-1">
+                            <a href="/admin/settings" class="flex items-center p-2 rounded hover:bg-indigo-700 {% if current_route starts with 'settings' %}bg-indigo-700{% endif %}">
+                                <i class="fas fa-cog mr-3"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm z-10">
+                <div class="flex items-center justify-between px-6 py-3">
+                    <!-- Mobile menu button -->
+                    <button class="md:hidden text-gray-500 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <!-- Search bar -->
+                    <div class="relative mx-4 hidden md:block">
+                        <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 w-64 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                    
+                    <!-- User menu -->
+                    <div class="flex items-center space-x-4">
+                        <button class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <div class="relative">
+                            <button class="flex items-center space-x-2 focus:outline-none">
+                                <img src="/assets/admin/img/user-avatar.jpg" alt="User" class="h-8 w-8 rounded-full">
+                                <span class="hidden md:inline">Admin User</span>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 hidden">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                                <a href="/admin/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+                <!-- Page Header -->
+                <div class="flex justify-between items-center mb-3">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">{% block header_title %}Dashboard{% endblock %}</h1>
+                        <nav class="flex" aria-label="Breadcrumb">
+                            <ul class="flex flex-row space-x-1 md:space-x-2 py-1">
+                                <li class="inline-flex items-center">
+                                    <a href="/admin" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600">
+                                        <i class="fas fa-home mr-2"></i>
+                                        Home
+                                    </a>
+                                </li>
+                                {% block breadcrumbs %}
+                        {% endblock %}
+                            </ul>
+                        </nav>
+                    </div>
+                    
+                    {% block page_actions %}
+                    <div class="flex space-x-2">
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                            <i class="fas fa-sync-alt mr-2"></i> Refresh
+                        </button>
+                    </div>
+                    {% endblock %}
+                </div>
+                <hr class="pb-3 w-[80%] mx-auto">
+                
+                <!-- Flash Messages -->
+                {% if flash.success %}
+                <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle mr-3"></i>
+                        <p>{{ flash.success }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if flash.error %}
+                <div class="mb-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-circle mr-3"></i>
+                        <p>{{ flash.error }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Content Block -->
+                {% block content %}{% endblock %}
+            </main>
+            
+            <!-- Footer -->
+            <footer class="bg-white border-t border-gray-200 py-4 px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-sm text-gray-600">
+                        &copy; {{ "now"|date("Y") }} Challenger Adventures. All rights reserved.
+                    </p>
+                    <div class="flex space-x-4 mt-2 md:mt-0">
+                        <a href="#" class="text-sm text-gray-600 hover:text-indigo-600">Privacy Policy</a>
+                        <a href="#" class="text-sm text-gray-600 hover:text-indigo-600">Terms of Service</a>
+                        <a href="#" class="text-sm text-gray-600 hover:text-indigo-600">Help</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Alpine JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+     <script>
+    $(document).ready(function() {
+        // Toggle sidebar on mobile
+        $('#toggleSidebar').click(function() {
+            $('#sidebar').removeClass('-translate-x-full');
+            $('#sidebarBackdrop').removeClass('hidden');
+        });
+        
+        // Close sidebar when clicking the close button
+        $('#closeSidebar').click(function() {
+            $('#sidebar').addClass('-translate-x-full');
+            $('#sidebarBackdrop').addClass('hidden');
+        });
+        
+        // Close sidebar when clicking on backdrop
+        $('#sidebarBackdrop').click(function() {
+            $('#sidebar').addClass('-translate-x-full');
+            $('#sidebarBackdrop').addClass('hidden');
+        });
+        
+        // Close sidebar when clicking a nav link (on mobile)
+        $('#sidebar a').click(function() {
+            if ($(window).width() < 768) {
+                $('#sidebar').addClass('-translate-x-full');
+                $('#sidebarBackdrop').addClass('hidden');
+            }
+        });
+        
+        // Handle window resize
+        $(window).resize(function() {
+            if ($(window).width() >= 768) {
+                $('#sidebar').removeClass('-translate-x-full');
+                $('#sidebarBackdrop').addClass('hidden');
+            }
+        });
+    });
+    </script>
+    
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -15,7 +15,7 @@ class ProjectsController
         $projects = Project::ordered()->get();
         $view = Twig::fromRequest($request);
 
-        return $view->render($response, 'projects/all.twig', ['projects' => $projects]);
+        return $view->render($response, 'projects/index.twig', ['projects' => $projects]);
     }
 
 
