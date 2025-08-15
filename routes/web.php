@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\BlogController;
+use App\Controllers\MediaController;
 use App\Controllers\ProjectsController;
 use App\Controllers\SiteController;
 use App\Models\BlogPost;
@@ -23,15 +24,19 @@ return function (App $app) {
     $app->post('/contact', [SiteController::class, 'saveContact'])->setName('contact.submit');
     $app->get('/blog', [BlogController::class, 'showAll'])->setName('blog');
     $app->get('/blog/{slug}', [BlogController::class, 'show'])->setName('blog.show');
+    $app->post('/upload-image', [MediaController::class, 'uploadImage']);
 
-    # projects routes
-    $app->group('/projects', function ($group) {
+    // Project routes
+    $app->get('/projects', [ProjectsController::class, 'showAll'])->setName('projects.show-all');
+    $app->get('projects/{slug}', [ProjectsController::class, 'show'])->setName('projects.show');
+
+    # Admin projects routes
+    $app->group('/admin/projects', function ($group) {
         $group->get('', [ProjectsController::class, 'index'])->setName('projects.index');
         $group->get('/create', [ProjectsController::class, 'create'])->setName('projects.create');
-        $group->post('', [ProjectsController::class, 'store'])->setName('projects.store');
-        $group->get('/{slug}', [ProjectsController::class, 'show'])->setName('projects.show');
+        $group->post('/save', [ProjectsController::class, 'store'])->setName('projects.save');
         $group->get('/{slug}/edit', [ProjectsController::class, 'edit'])->setName('projects.edit');
-        $group->put('/{slug}', [ProjectsController::class, 'update'])->setName('projects.update');
+        $group->put('/{slug}/update', [ProjectsController::class, 'update'])->setName('projects.update');
         $group->delete('/{slug}', [ProjectsController::class, 'destroy'])->setName('projects.destroy');
     });
 

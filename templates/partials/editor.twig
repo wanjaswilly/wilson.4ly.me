@@ -1,4 +1,208 @@
-<div id="editor" class="mt-1 min-h-[300px] bg-white border border-gray-300 rounded-md p-4 focus:border-blue-500 focus:ring-blue-500">
-    {{ content|raw }}
+<div class="editor-container mt-1 bg-white rounded-md border border-gray-300 shadow-sm">
+    <div class="toolbar flex flex-wrap gap-1 mb-2 p-2 border-b border-gray-200">
+        <button type="button" data-cmd="bold" title="Bold" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-bold"></i>
+        </button>
+        <button type="button" data-cmd="italic" title="Italic" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-italic"></i>
+        </button>
+        <button type="button" data-cmd="underline" title="Underline" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-underline"></i>
+        </button>
+        <button type="button" data-cmd="strikeThrough" title="Strikethrough" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-strikethrough"></i>
+        </button>
+        <button type="button" data-cmd="insertUnorderedList" title="Bullet List" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-list-ul"></i>
+        </button>
+        <button type="button" data-cmd="insertOrderedList" title="Numbered List" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-list-ol"></i>
+        </button>
+        <button type="button" data-cmd="insertHorizontalRule" title="Divider" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-minus"></i>
+        </button>
+        <button type="button" data-cmd="createLink" title="Link" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-link"></i>
+        </button>
+        <button type="button" data-cmd="justifyLeft" title="Align Left" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-align-left"></i>
+        </button>
+        <button type="button" data-cmd="justifyCenter" title="Center" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-align-center"></i>
+        </button>
+        <button type="button" data-cmd="justifyRight" title="Align Right" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-align-right"></i>
+        </button>
+        <button type="button" data-cmd="formatBlock" data-value="h2" title="Heading" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-heading"></i>
+        </button>
+        <button type="button" data-cmd="formatBlock" data-value="blockquote" title="Quote" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-quote-right"></i>
+        </button>
+        <button type="button" id="image-upload-btn" title="Upload Image" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-image"></i>
+        </button>
+        <button type="button" data-cmd="code" title="Code Block" class="p-2 rounded hover:bg-gray-100">
+            <i class="fas fa-code"></i>
+        </button>
+    </div>
+    
+    <input type="file" id="image-upload" accept="image/*" class="hidden">
+    <div class="progress-container hidden mt-2">
+        <div class="progress-bar h-1 bg-gray-200 rounded overflow-hidden">
+            <div class="progress h-full bg-blue-500" id="upload-progress" style="width: 0%"></div>
+        </div>
+        <small id="upload-status" class="text-sm text-gray-500">Uploading...</small>
+    </div>
+    
+    <div id="editor" contenteditable="true" class="min-h-[300px] p-4 focus:outline-none">
+        {{ content|default('')|raw }}
+    </div>
+    <textarea id="content" name="content" class="hidden">{{ content|default('') }}</textarea>
 </div>
-<textarea id="content" name="content" class="hidden">{{ content }}</textarea>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editor = document.getElementById('editor');
+        const contentInput = document.getElementById('content');
+        const imageUploadBtn = document.getElementById('image-upload-btn');
+        const imageUploadInput = document.getElementById('image-upload');
+        const progressContainer = document.querySelector('.progress-container');
+        const progressBar = document.getElementById('upload-progress');
+        const uploadStatus = document.getElementById('upload-status');
+        
+        // Find the closest form and add submit handler
+        const form = editor.closest('form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                contentInput.value = editor.innerHTML;
+            });
+        }
+        
+        // Toolbar functionality
+        document.querySelectorAll('.toolbar button').forEach(btn => {
+            if (btn.id !== 'image-upload-btn') {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const cmd = btn.dataset.cmd;
+                    const value = btn.dataset.value;
+                    
+                    if (cmd === 'code') {
+                        const code = prompt('Enter your code:');
+                        if (code) {
+                            const pre = document.createElement('pre');
+                            pre.style.backgroundColor = '#f5f5f5';
+                            pre.style.padding = '10px';
+                            pre.style.borderRadius = '4px';
+                            pre.textContent = code;
+                            insertAtCursor(pre);
+                        }
+                    }
+                    else if (value) {
+                        document.execCommand(cmd, false, value);
+                    } else {
+                        document.execCommand(cmd, false, null);
+                    }
+                    
+                    editor.focus();
+                    updateActiveButtons();
+                });
+            }
+        });
+        
+        // Image upload functionality
+        imageUploadBtn.addEventListener('click', () => {
+            imageUploadInput.click();
+        });
+        
+        imageUploadInput.addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                uploadImage(this.files[0]);
+            }
+        });
+        
+        function uploadImage(file) {
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            progressContainer.classList.remove('hidden');
+            progressBar.style.width = '0%';
+            uploadStatus.textContent = 'Uploading...';
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload-image', true);
+            
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    const percentComplete = (e.loaded / e.total) * 100;
+                    progressBar.style.width = percentComplete + '%';
+                }
+            };
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        insertImage(response.filePath);
+                        uploadStatus.textContent = 'Upload complete!';
+                    } else {
+                        uploadStatus.textContent = 'Upload failed: ' + response.error;
+                    }
+                } else {
+                    uploadStatus.textContent = 'Upload failed';
+                }
+                
+                setTimeout(() => {
+                    progressContainer.classList.add('hidden');
+                }, 2000);
+            };
+            
+            xhr.send(formData);
+        }
+        
+        function insertImage(src) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = 'editor-image max-w-full h-auto my-2';
+            insertAtCursor(img);
+            editor.focus();
+        }
+    
+        function insertAtCursor(element) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(element);
+                
+                // Move cursor after the inserted element
+                const newRange = document.createRange();
+                newRange.setStartAfter(element);
+                newRange.collapse(true);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+            } else {
+                editor.appendChild(element);
+            }
+        }
+        
+        function updateActiveButtons() {
+            document.querySelectorAll('.toolbar button').forEach(btn => {
+                const cmd = btn.dataset.cmd;
+                if (cmd && document.queryCommandState(cmd)) {
+                    btn.classList.add('bg-gray-200');
+                } else {
+                    btn.classList.remove('bg-gray-200');
+                }
+            });
+        }
+        
+        editor.addEventListener('keyup', updateActiveButtons);
+        editor.addEventListener('mouseup', updateActiveButtons);
+    });
+</script>

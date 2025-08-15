@@ -1,4 +1,10 @@
-{% extends 'layout.twig' %}
+{% extends 'admin.twig' %}
+
+{% block styles %}
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+{% endblock %}
+
+{% block title %}Add New Project{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8 max-w-4xl">
@@ -6,11 +12,8 @@
         {% if project is defined %}Edit{% else %}Create{% endif %} Project
     </h1>
     
-    <form method="post" action="{% if project is defined %}/projects/{{ project.slug }}{% else %}/projects{% endif %}">
-        {{ csrf() }}
-        {% if project is defined %}
-        <input type="hidden" name="_METHOD" value="PUT">
-        {% endif %}
+    <form method="post" action="{{ url_for('projects.save') }}">
+        {# {{ csrf() }} #}
         
         <div class="space-y-6">
             <div>
@@ -27,7 +30,7 @@
             
             <div>
                 <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
-                {% include 'partials/editor.html.twig' with {
+                {% include 'partials/editor.twig' with {
                     content: project.content|default('')
                 } %}
             </div>

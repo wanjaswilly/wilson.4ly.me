@@ -1,4 +1,7 @@
-{% extends 'layout.twig' %}
+{% extends 'admin.twig' %}
+
+{% block title %}Edit A Project{% endblock %}
+
 
 {% block content %}
 <div class="container mx-auto px-4 py-8 max-w-4xl">
@@ -6,8 +9,9 @@
         {% if project is defined %}Edit{% else %}Create{% endif %} Project
     </h1>
     
-    <form method="post" action="{% if project is defined %}/projects/{{ project.slug }}{% else %}/projects{% endif %}">
-        {{ csrf() }}
+    <form method="post" action="url_for('projects.update', slug=project.slug)">
+        {# {{ csrf() }} #}
+        
         {% if project is defined %}
         <input type="hidden" name="_METHOD" value="PUT">
         {% endif %}

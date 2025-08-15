@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     protected $table = 'projects';
-        protected $fillable = [
+
+    protected $fillable = [
         'title',
         'slug',
         'description',
@@ -24,7 +25,7 @@ class Project extends Model
 
     protected $casts = [
         'is_featured' => 'boolean',
-        'technologies' => 'array',
+        'technologies' => 'array', 
         'start_date' => 'date',
         'end_date' => 'date'
     ];
